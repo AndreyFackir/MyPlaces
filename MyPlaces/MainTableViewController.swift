@@ -36,7 +36,6 @@ class MainTableViewController: UITableViewController {
         cell.textLabel?.text = restaurantNames[indexPath.row]
         cell.imageView?.image = UIImage(named: restaurantNames[indexPath.row])
 
-        var count = 0
         
         return cell
     }

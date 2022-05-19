@@ -10,9 +10,7 @@ import UIKit
 class MainTableViewController: UITableViewController {
     
     
-    let restaurantNames = ["Burger Heroes", "Kitchen", "Bonsai", "Дастархан", "IndoKitay",
-                           "X.O", "Balkan Grill", "Sherlock Holmes", "Speak Easy", "Morris Pub", "Tasty Stories", "Classic",
-                           "Love&Life", "Shock", "Bochka"]
+    let places = Place.getPlaces()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +22,7 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return restaurantNames.count
+        return places.count
     }
 
     
@@ -35,8 +33,10 @@ class MainTableViewController: UITableViewController {
 
         // Configure the cell...
         
-        cell.nameLabel.text = restaurantNames[indexPath.row]
-        cell.imageOfPlace?.image = UIImage(named: restaurantNames[indexPath.row])
+        cell.nameLabel.text = places[indexPath.row].name
+        cell.imageOfPlace?.image = UIImage(named: places[indexPath.row].image)
+        cell.locationLabel.text = places[indexPath.row].location
+        cell.typeLabel.text = places[indexPath.row].type
         //cделали круглым только imageView
         //высоту строки делим на 2
         cell.imageOfPlace?.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
@@ -50,11 +50,11 @@ class MainTableViewController: UITableViewController {
     
     //MARK: - TableViewDelegate
     
-    // высота строки
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
-        
-    }
+//    // высота строки
+//    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 85
+//
+//    }
     
     /*
     // MARK: - Navigation
@@ -66,4 +66,6 @@ class MainTableViewController: UITableViewController {
     }
     */
 
+    //нужен для  того, чтобы мы могли на него сослаться при нажатии на кнопку cancel и вернуться на MainTableViewController
+    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {}
 }

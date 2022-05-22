@@ -10,7 +10,7 @@ import UIKit
 class MainTableViewController: UITableViewController {
     
     
-    let places = Place.getPlaces()
+    var places = Place.getPlaces()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,10 +33,22 @@ class MainTableViewController: UITableViewController {
 
         // Configure the cell...
         
-        cell.nameLabel.text = places[indexPath.row].name
-        cell.imageOfPlace?.image = UIImage(named: places[indexPath.row].image)
-        cell.locationLabel.text = places[indexPath.row].location
-        cell.typeLabel.text = places[indexPath.row].type
+        let place = places[indexPath.row]
+        
+        cell.nameLabel.text = place.name
+        cell.locationLabel.text = place.location
+        cell.typeLabel.text = place.type
+        
+        //какое изображение присваиваем ячейке
+        
+        //если нил, то по имени файла
+        if place.image == nil {
+            cell.imageOfPlace .image = UIImage(named: place.restaurantImage!)
+        } else {
+            cell.imageOfPlace.image = place.image
+        }
+        
+        
         //cделали круглым только imageView
         //высоту строки делим на 2
         cell.imageOfPlace?.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
@@ -67,5 +79,19 @@ class MainTableViewController: UITableViewController {
     */
 
     //нужен для  того, чтобы мы могли на него сослаться при нажатии на кнопку cancel и вернуться на MainTableViewController
-    @IBAction func cancelAction(_ segue: UIStoryboardSegue) {}
+    @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
+        
+        //параметр destination используем, когда мы хотим передать данные от ВС с которого переходим ВС на который переходим
+        
+        //сейчас мы выполняем возврат с ВС на который переходили ранее, поэтому используем анвинд и свойство соурс
+        
+        guard let newPlaceVC = segue.source  as? NewPlaceViewController else {return}
+        
+        newPlaceVC.saveNewPlace()
+        places.append(newPlaceVC.newPlace!)
+        
+        //обновляем интерфейс
+        tableView.reloadData()
+        
+    }
 }

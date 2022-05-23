@@ -6,15 +6,20 @@
 //
 
 import UIKit
+import RealmSwift
 
 class MainTableViewController: UITableViewController {
     
-    
-    var places = Place.getPlaces()
+    //Results - автообновляемый тип контейнера который возвращает запрашиваемые объекты
+    //Results - аналог массива
+    var places: Results<Place>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //чтобы отобразить все, надо инициализировать объект places
+        //чтобы сделать запрос объектов, обратимся к глобальному свойству рилм и вызываем метод обжектс указав в качестве параметра Плейс(сам тип данных)
+        places = realm.objects(Place.self)
     }
 
     // MARK: - Table view data source
@@ -22,45 +27,55 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return places.count
+        return places.isEmpty ? 0 : places.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         //чтобы использовать отдельный класс для ячейки даункастим ее через as!
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
 
         // Configure the cell...
-        
+
         let place = places[indexPath.row]
-        
+
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
-        
+
         //какое изображение присваиваем ячейке
-        
-        //если нил, то по имени файла
-        if place.image == nil {
-            cell.imageOfPlace .image = UIImage(named: place.restaurantImage!)
-        } else {
-            cell.imageOfPlace.image = place.image
-        }
-        
-        
+        cell.imageOfPlace.image = UIImage(data: place.imageData!)
+       
+      
+
         //cделали круглым только imageView
         //высоту строки делим на 2
         cell.imageOfPlace?.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
         //обрезаем изображение пограницам ImageView
         cell.imageOfPlace?.clipsToBounds = true
-        
-        
-        
+
+
+
         return cell
     }
     
     //MARK: - TableViewDelegate
+    
+    
+    //удаление объектов из таблицы и базы данных
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let place = places[indexPath.row]
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
+            
+            StorageManager.deleteObject(place)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+        }
+        
+        return [deleteAction]
+    }
     
 //    // высота строки
 //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -88,7 +103,7 @@ class MainTableViewController: UITableViewController {
         guard let newPlaceVC = segue.source  as? NewPlaceViewController else {return}
         
         newPlaceVC.saveNewPlace()
-        places.append(newPlaceVC.newPlace!)
+       // places.append(newPlaceVC.newPlace!)
         
         //обновляем интерфейс
         tableView.reloadData()

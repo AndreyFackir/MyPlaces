@@ -9,7 +9,8 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    var newPlace: Place?
+    
+   
     var imageIsChanged = false
     
     @IBOutlet weak var placeImage: UIImageView!
@@ -30,6 +31,8 @@ class NewPlaceViewController: UITableViewController {
         //отслеживаем внесение данных в поле текстфилд
         // метод textFieldChanged будет вызываться при редактировании (editingChanged) текстфилд
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        
+       
 
     }
 
@@ -91,6 +94,7 @@ class NewPlaceViewController: UITableViewController {
 
     func saveNewPlace() {
         
+       
         var image: UIImage?
         
         //если картинку выбрал пользователь
@@ -102,8 +106,11 @@ class NewPlaceViewController: UITableViewController {
             image = UIImage(named: "imagePlaceholder")
         }
         
-        //делаем форс анрап для нейм, так как метод saveNewPlace будет срабатывать только когда поле не пустое
-        newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, restaurantImage: nil, image: image)
+        let imageData = image?.pngData()
+        
+        let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData)
+        
+        StorageManager.saveObject(newPlace)
         
     }
     

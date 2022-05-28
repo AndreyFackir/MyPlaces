@@ -9,8 +9,9 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
+    //сюда будем передавать выбранную запись через сегвей для редактирования
+    var currentPlace: Place?
     
-   
     var imageIsChanged = false
     
     @IBOutlet weak var placeImage: UIImageView!
@@ -32,7 +33,8 @@ class NewPlaceViewController: UITableViewController {
         // метод textFieldChanged будет вызываться при редактировании (editingChanged) текстфилд
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
-       
+       //вызываем метод setupEditScreen
+        setupEditScreen()
 
     }
 
@@ -86,6 +88,7 @@ class NewPlaceViewController: UITableViewController {
             //необходимо вызывать алерт вьюконтроллер
             present(actionSheet, animated: true)
             
+            
         } else {
             //скрываем клаву по тапу за пределами первой ячейки
             view.endEditing(true)
@@ -113,6 +116,34 @@ class NewPlaceViewController: UITableViewController {
         StorageManager.saveObject(newPlace)
         
     }
+    
+    
+    //создадим приватный метод  для редактирования ячеек
+    //все что здесь делается должно быть применено только в случае рекдактирования записи
+    //этот момент можно определить по наличию или отссутсвию значения у объекта currentPlace
+    // данный объект опционал, при добавлении новой записи, мы в него ничего не передаем, поэтому оно инциализровано как нил
+    private func setupEditScreen() {
+        
+        if currentPlace != nil {
+            //необходимо поставить во всем поляВС значения currentPlace
+            // чтобы подставить изображение, необходимо значение с типом дата приветси к значению с типом имадж
+            //если это получается, создаем свойстов имадж и присваиваем ему объект класса UIImage
+            guard let data = currentPlace?.imageData, let image = UIImage(data: data) else {return}
+            
+            //теперь можешь присвоить  image свойству аутлета placeImage
+            
+            placeImage.image = image
+            
+            //чтобы изображение было нормальным в ячейке (масштабирует по содержимуму)
+            placeImage.contentMode = .scaleAspectFill
+            placeName.text = currentPlace?.name
+            placeLocation.text = currentPlace?.location
+            placeType.text = currentPlace?.type
+        }
+    }
+    
+    
+    //
     
     @IBAction func cancelACtion(_ sender: Any) {
         dismiss(animated: true)

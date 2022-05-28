@@ -64,6 +64,25 @@ class MainTableViewController: UITableViewController {
     
     
     //удаление объектов из таблицы и базы данных
+    
+    /*
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+       
+        
+        let contextItem = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, boolValue) in
+            let place = self.places[indexPath.row]
+            StorageManager.deleteObject(place)
+            boolValue(true)
+        }
+        let deleteAction = UISwipeActionsConfiguration(actions: [contextItem])
+       
+        return deleteAction
+    }
+    
+    */
+    
+    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let place = places[indexPath.row]
@@ -76,22 +95,34 @@ class MainTableViewController: UITableViewController {
         
         return [deleteAction]
     }
-    
+   
 //    // высота строки
 //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        return 85
 //
 //    }
     
-    /*
-    // MARK: - Navigation
+//MARK: - Naavigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+       
+        if segue.identifier == "showDetail" {
+            //когда тапаем по ячейке нам надо передать объект из ячейки на другой ВС
+            //надо извлечь конкретный объект из массива плейс
+            //в массиве он хранится под индексом соответсвующий индексу текущей ячейки
+            //сначала определяем индкес выбранной ячейки
+            guard let indexPath = tableView.indexPathForSelectedRow else {return}
+            
+            //извлекаем объект по индексу из массива плейс
+            let place = places[indexPath.row]
+            
+            //создаем экз ВС
+            let newPlaceVC = segue.destination as! NewPlaceViewController
+            newPlaceVC.currentPlace = place
+        }
     }
-    */
+    
 
     //нужен для  того, чтобы мы могли на него сослаться при нажатии на кнопку cancel и вернуться на MainTableViewController
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {

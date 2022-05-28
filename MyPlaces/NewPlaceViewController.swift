@@ -95,7 +95,7 @@ class NewPlaceViewController: UITableViewController {
         }
     }
 
-    func saveNewPlace() {
+    func savePlace() {
         
        
         var image: UIImage?
@@ -113,7 +113,21 @@ class NewPlaceViewController: UITableViewController {
         
         let newPlace = Place(name: placeName.text!, location: placeLocation.text, type: placeType.text, imageData: imageData)
         
-        StorageManager.saveObject(newPlace)
+        
+        //чтобы сохранять определяем в каком режиме мы находимся( режим редактировани яили добавления нового)
+        //если редактируем
+        if currentPlace != nil {
+            try! realm.write{
+                currentPlace?.name = newPlace.name
+                currentPlace?.location = newPlace.location
+                currentPlace?.type = newPlace.type
+                currentPlace?.imageData = newPlace.imageData
+            }
+        } else {
+            //Если добавляем новый объект
+            StorageManager.saveObject(newPlace)
+        }
+        
         
     }
     
@@ -128,6 +142,10 @@ class NewPlaceViewController: UITableViewController {
         
         if currentPlace != nil {
             setupNavigationBar()
+            
+            //при редактировании инфы изображение не будет меняться на фоновое
+            imageIsChanged = true
+            
             //необходимо поставить во всем поляВС значения currentPlace
             // чтобы подставить изображение, необходимо значение с типом дата приветси к значению с типом имадж
             //если это получается, создаем свойстов имадж и присваиваем ему объект класса UIImage

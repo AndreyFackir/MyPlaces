@@ -133,7 +133,7 @@ class MainTableViewController: UITableViewController {
         
         guard let newPlaceVC = segue.source  as? NewPlaceViewController else {return}
         
-        newPlaceVC.saveNewPlace()
+        newPlaceVC.savePlace()
        // places.append(newPlaceVC.newPlace!)
         
         //обновляем интерфейс

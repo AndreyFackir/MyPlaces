@@ -124,7 +124,10 @@ class NewPlaceViewController: UITableViewController {
     // данный объект опционал, при добавлении новой записи, мы в него ничего не передаем, поэтому оно инциализровано как нил
     private func setupEditScreen() {
         
+       
+        
         if currentPlace != nil {
+            setupNavigationBar()
             //необходимо поставить во всем поляВС значения currentPlace
             // чтобы подставить изображение, необходимо значение с типом дата приветси к значению с типом имадж
             //если это получается, создаем свойстов имадж и присваиваем ему объект класса UIImage
@@ -143,7 +146,21 @@ class NewPlaceViewController: UITableViewController {
     }
     
     
-    //
+    //чтобы в навигейшн баре при радактировании ячеек отображалось название заведения
+    //все это должно работать только когда мы редактируем запись, поэтому вызываем этот метод в setupEditScreen
+    private func setupNavigationBar() {
+        
+        //чтобы изменить название кнопки возврата
+        
+        //убираем кнопку Cancel
+       navigationItem.leftBarButtonItem = nil
+        
+        //заголовок = текущее название заведения
+        title = currentPlace?.name
+        
+        saveButton.isEnabled = true
+        
+    }
     
     @IBAction func cancelACtion(_ sender: Any) {
         dismiss(animated: true)

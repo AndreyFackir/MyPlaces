@@ -77,7 +77,7 @@
                             <outlet property="delegate" destination="bMs-G5-yJw" id="dWH-Oo-wjm"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="My Places" id="vC6-Hb-7fi">
+                    <navigationItem key="navigationItem" title="My Places" largeTitleDisplayMode="never" id="vC6-Hb-7fi">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="aZM-xT-AhZ">
                             <connections>
                                 <segue destination="QDI-oM-Fac" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="Ish-Bc-oPA"/>
@@ -243,7 +243,7 @@
                             <outlet property="delegate" destination="bHE-ak-6e5" id="pJE-od-zk3"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="New Place" id="rhb-I6-vXg">
+                    <navigationItem key="navigationItem" title="New Place" largeTitleDisplayMode="always" id="rhb-I6-vXg">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="r5t-CP-RIO">
                             <connections>
                                 <action selector="cancelACtion:" destination="bHE-ak-6e5" id="5YX-UW-5Zl"/>
@@ -272,8 +272,8 @@
         <scene sceneID="PID-Xb-f6e">
             <objects>
                 <navigationController id="1pM-vq-MQN" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6Py-o3-r8l">
-                        <rect key="frame" x="0.0" y="44" width="428" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="6Py-o3-r8l">
+                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="SnellRoundhand-Bold" family="Snell Roundhand" pointSize="24"/>
@@ -307,7 +307,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="1Qb-a3-UBA"/>
+        <segue reference="HAF-QQ-g3Q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Photo" width="194.66667175292969" height="195.66667175292969"/>

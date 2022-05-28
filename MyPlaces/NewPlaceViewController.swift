@@ -151,6 +151,9 @@ class NewPlaceViewController: UITableViewController {
     private func setupNavigationBar() {
         
         //чтобы изменить название кнопки возврата
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        }
         
         //убираем кнопку Cancel
        navigationItem.leftBarButtonItem = nil

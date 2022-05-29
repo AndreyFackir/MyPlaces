@@ -8,12 +8,14 @@
 import UIKit
 import RealmSwift
 
-class MainTableViewController: UITableViewController {
+class MainTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //Results - автообновляемый тип контейнера который возвращает запрашиваемые объекты
     //Results - аналог массива
     var places: Results<Place>!
 
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,13 +27,13 @@ class MainTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return places.isEmpty ? 0 : places.count
     }
 
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         //чтобы использовать отдельный класс для ячейки даункастим ее через as!
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
@@ -83,7 +85,7 @@ class MainTableViewController: UITableViewController {
     */
     
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let place = places[indexPath.row]
         let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in

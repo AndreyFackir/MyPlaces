@@ -15,6 +15,10 @@ class Place: Object {
     @objc dynamic var type: String?
     @objc dynamic var imageData: Data?
     
+    //так как у нас будет сортировка по дате, то добавим поле с типом дейт
+    // необходимо для внутреннего использования
+    @objc dynamic var date = Date()
+    
     // convinience - назначенный инииализатор, предназанченный для того, чтобы полностью инитить все свойства представленные классом
    
     convenience init(name: String, location: String?, type: String?, imageData: Data?) {

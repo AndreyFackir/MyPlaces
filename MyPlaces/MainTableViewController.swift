@@ -13,8 +13,16 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
     //Results - автообновляемый тип контейнера который возвращает запрашиваемые объекты
     //Results - аналог массива
     var places: Results<Place>!
+    
+    // чтобы сортировалось в обратном порядке
+    var ascendingSorted = true
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,5 +149,51 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
         //обновляем интерфейс
         tableView.reloadData()
         
+    }
+    @IBAction func sortSelection(_ sender: UISegmentedControl) {
+        //заменим все ниже написанное
+        
+        sorting()
+        
+//        // если индек выбранного сегмента == 0
+//        if sender.selectedSegmentIndex == 0 {
+//            // то сортируем по дате в порядке возрастания
+//            places = places.sorted(byKeyPath: "date")
+//        } else {
+//            places = places.sorted(byKeyPath: "name")
+//        }
+//
+//        //после выбора сегмента обновляем таблицу
+//        tableView.reloadData()
+//
+        
+        
+    }
+    @IBAction func reversedSorting(_ sender: Any) {
+        
+        //меняем значение свойтсва
+        ascendingSorted.toggle()
+        
+        
+        if ascendingSorted {
+            //при смене значения ascendingSorted меняем изображение кнопки
+            reversedSortingButton.image = UIImage(named: "AZ")
+        } else {
+            reversedSortingButton.image = UIImage(named: "ZA")
+        }
+        
+        sorting()
+    }
+    
+    //чтобы выполнить сортировку используем ту же логику что и при сегментед котроле
+    //чтобы не повторяться сделаем привтаный метод
+    private func sorting() {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            places = places.sorted(byKeyPath: "date", ascending: ascendingSorted)
+        } else {
+            places = places.sorted(byKeyPath: "name", ascending: ascendingSorted)
+        }
+        
+        tableView.reloadData()
     }
 }

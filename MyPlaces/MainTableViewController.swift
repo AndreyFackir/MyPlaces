@@ -173,7 +173,12 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
             guard let indexPath = tableView.indexPathForSelectedRow else {return}
             
             //извлекаем объект по индексу из массива плейс
-            let place = places[indexPath.row]
+            let place: Place
+            if isFiltering{
+                place = filteredPlaces[indexPath.row]
+            } else {
+                place = places[indexPath.row]
+            }
             
             //создаем экз ВС
             let newPlaceVC = segue.destination as! NewPlaceViewController

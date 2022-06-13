@@ -10,12 +10,34 @@ import RealmSwift
 
 class MainTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    
+    //для работы с UISearchController
+    //передавая нил мы говорим контроллеру поиска что для отображения результат хотим использовать тот же вью, в котором отображается основной контент
+    //для этого класс мейнВС должен быть подписан под протокол
+    private let searchController = UISearchController(searchResultsController: nil)
+    
     //Results - автообновляемый тип контейнера который возвращает запрашиваемые объекты
-    //Results - аналог массива
-    var places: Results<Place>!
+    //Results - аналог массива c типом Place
+    private var places: Results<Place>!
+    
+    //для отображения поискового запроса, понадобится еще один массив, куда будем помещать отфильрованные записи
+    private var filteredPlaces: Results<Place>!
     
     // чтобы сортировалось в обратном порядке
-    var ascendingSorted = true
+    private var ascendingSorted = true
+    
+    //еще одно логисческое свойсвто, которе бдует возвращать тру или фолс в зависимости от того, пустая строка поиска или нет
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else {return false}
+        return text.isEmpty
+    }
+    
+    //для остлеживания активации поискового запроса
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
+    
+   
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -30,12 +52,31 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
         //чтобы отобразить все, надо инициализировать объект places
         //чтобы сделать запрос объектов, обратимся к глобальному свойству рилм и вызываем метод обжектс указав в качестве параметра Плейс(сам тип данных)
         places = realm.objects(Place.self)
+
+            // setup search Controller
+        //получателем информации об изменение в поисковой строке бдует наш класс
+        searchController.searchResultsUpdater =  self
+        
+        //позволит взаимодействовать с нашим контроллером как с основным
+        searchController.obscuresBackgroundDuringPresentation = false
+        
+        searchController.searchBar.placeholder = "Search"
+        //присвоим строку поиска в навигейшн бар
+        navigationItem.searchController = searchController
+        //позволяет отпустить строку поиска при переходе на другой экран
+        definesPresentationContext = true
+        
     }
 
     // MARK: - Table view data source
 
     
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+         
+         if isFiltering{
+             return filteredPlaces.count
+         }
+         
         // #warning Incomplete implementation, return the number of rows
         return places.isEmpty ? 0 : places.count
     }
@@ -47,8 +88,15 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
 
         // Configure the cell...
-
-        let place = places[indexPath.row]
+         
+         //cоздаем экз модели, чтобы присвоить ему значения из того илил иного массива
+            var place = Place()
+         
+         if isFiltering{
+             place = filteredPlaces[indexPath.row]
+         } else {
+             place = places[indexPath.row]
+         }
 
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
@@ -62,7 +110,7 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
         //cделали круглым только imageView
         //высоту строки делим на 2
         cell.imageOfPlace?.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
-        //обрезаем изображение пограницам ImageView
+        //обрезаем изображение по границам ImageView
         cell.imageOfPlace?.clipsToBounds = true
 
 
@@ -196,4 +244,25 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         tableView.reloadData()
     }
+}
+
+extension MainTableViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        // можно сделать форс анрап, тк метод вызывается только тогда когда тапаем по поисковой строке
+        filterContentForSearchtext(searchController.searchBar.text!)
+    }
+    
+    //для работы с поисковыми запросами объявим метод, который будет заниматься фильтрацией контента в сотв с поисковым запросом
+    private func filterContentForSearchtext(_ searchText: String) {
+        
+        // заполняем коллекцию отфильтрованными обхектами из основномго массива плейсис
+        // из реалма CONTAINS
+        //[c] значит что мы не смотрим на регистр символов
+        //%@ туда подставляем конкретную переменную
+        filteredPlaces = places.filter("name CONTAINS[c] %@ OR location CONTAINS[c] %@", searchText, searchText)
+        
+        tableView.reloadData()
+    }
+    
 }

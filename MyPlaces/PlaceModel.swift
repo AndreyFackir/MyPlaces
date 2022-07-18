@@ -18,10 +18,11 @@ class Place: Object {
     //так как у нас будет сортировка по дате, то добавим поле с типом дейт
     // необходимо для внутреннего использования
     @objc dynamic var date = Date()
+    @objc dynamic var  rating = 0.0 //сохраняем рейтинг заведений
     
     // convinience - назначенный инииализатор, предназанченный для того, чтобы полностью инитить все свойства представленные классом
    
-    convenience init(name: String, location: String?, type: String?, imageData: Data?) {
+    convenience init(name: String, location: String?, type: String?, imageData: Data?, rating: Double) {
         //такой инициализатор должен вызывать инит самого класса с пустыми параметрами
         //для того, чтобы мы иниццииализировали все свойства значениями по умолчанию
         self.init()
@@ -29,7 +30,7 @@ class Place: Object {
         self.location = location
         self.type = type
         self.imageData = imageData
-        
+        self.rating = rating
     }
     
 }

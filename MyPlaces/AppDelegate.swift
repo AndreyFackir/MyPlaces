@@ -16,18 +16,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        let schemaVersion: UInt64 = 2 // при изменеии(добавлении свойства в бд) необходимо обновить номер текущей схемы
+        
+        
         //для того, чтобы база данных обновлялась при добавлении новых объектов
         
         //cоздаем новую конфигурацию,
         let config = Realm.Configuration(
             
             //устанавливаем новую версию, она должна быть выше предыдущей (если никогда до этого не меняли версию, то версия 0)
-            schemaVersion: 1,
+            schemaVersion: 2,
             //созадем блок, который будет вызван автоматически при обращении к базе если предыдущая весрия ниже установленной
             migrationBlock: {migraton, oldSchemaVersion in
                 //так как мы ничего не переносили из БД, то старая весрия равна 0
                 //Если старая схема < 1, ничего не делаем
-                if (oldSchemaVersion < 1) {
+                if (oldSchemaVersion < schemaVersion) {
                     
                 }
             })

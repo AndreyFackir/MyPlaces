@@ -6,6 +6,6 @@ target 'MyPlaces' do
   use_frameworks!
 
   pod 'RealmSwift', '~> 4.4.1'
-  pod 'Cosmos', '~> 18.0'
+  pod 'Cosmos', '~> 23.0'
 
 end

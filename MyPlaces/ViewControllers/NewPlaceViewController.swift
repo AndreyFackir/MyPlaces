@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Cosmos
 
 class NewPlaceViewController: UITableViewController {
     
@@ -14,6 +15,7 @@ class NewPlaceViewController: UITableViewController {
     
     var imageIsChanged = false
     
+    @IBOutlet weak var cosmosView: CosmosView!
     @IBOutlet weak var placeImage: UIImageView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var placeName: UITextField!

@@ -6,16 +6,16 @@
 //
 
 import UIKit
-import Cosmos
+//import Cosmos
 
-class NewPlaceViewController: UITableViewController {
+ class NewPlaceViewController: UITableViewController {
     
     //сюда будем передавать выбранную запись через сегвей для редактирования
     var currentPlace: Place?
-    
+    //var currentRating = 0.0 //for cosmos framework
     var imageIsChanged = false
     
-    @IBOutlet weak var cosmosView: CosmosView!
+  //  @IBOutlet weak var cosmosView: CosmosView!
     @IBOutlet weak var placeImage: UIImageView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var placeName: UITextField!
@@ -41,6 +41,15 @@ class NewPlaceViewController: UITableViewController {
         
        //вызываем метод setupEditScreen
         setupEditScreen()
+        
+//        cosmosView.settings.fillMode = .half // заполнение звезд наполовину, full - полностью, precise - процентно
+//
+//        cosmosView.didTouchCosmos = {rating in
+//            self.currentRating = rating
+//
+//        }
+        
+       
 
     }
 
@@ -121,7 +130,7 @@ class NewPlaceViewController: UITableViewController {
                              location: placeLocation.text,
                              type: placeType.text,
                              imageData: imageData,
-                             rating: Double(ratingControl.rating))
+                             rating: Double(ratingControl.rating)) // currentRating for cosmos
         
         
         //чтобы сохранять определяем в каком режиме мы находимся( режим редактировани яили добавления нового)
@@ -171,7 +180,8 @@ class NewPlaceViewController: UITableViewController {
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
-            ratingControl.rating = Int(currentPlace?.rating ?? 0) 
+            ratingControl.rating = Int(currentPlace?.rating ?? 0)
+           // cosmosView.rating = currentPlace?.rating ?? 0
         }
     }
     

@@ -31,7 +31,7 @@
 		81741E632835674E00EFE138 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		81741E652835675100EFE138 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		81741E682835675100EFE138 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		81741E6A2835675100EFE138 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81741E6A2835675100EFE138 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 		81741E7028356BE200EFE138 /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		81741E722836A01200EFE138 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		81741E742836A5D400EFE138 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
@@ -94,6 +94,7 @@
 		81741E5B2835674E00EFE138 /* MyPlaces */ = {
 			isa = PBXGroup;
 			children = (
+				81741E6A2835675100EFE138 /* Info.plist */,
 				81B947792889C1F0006066A5 /* Support Files */,
 				81B9477A2889C20B006066A5 /* ViewControllers */,
 				81B9477B2889C21B006066A5 /* Model */,
@@ -109,7 +110,6 @@
 				81741E5C2835674E00EFE138 /* AppDelegate.swift */,
 				81741E5E2835674E00EFE138 /* SceneDelegate.swift */,
 				81741E652835675100EFE138 /* Assets.xcassets */,
-				81741E6A2835675100EFE138 /* Info.plist */,
 			);
 			path = "Support Files";
 			sourceTree = "<group>";
@@ -353,7 +353,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -408,7 +408,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

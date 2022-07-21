@@ -78,7 +78,7 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
          }
          
         // #warning Incomplete implementation, return the number of rows
-        return places.isEmpty ? 0 : places.count
+        return  places.count
     }
 
     
@@ -90,13 +90,8 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // Configure the cell...
          
          //cоздаем экз модели, чтобы присвоить ему значения из того илил иного массива
-            var place = Place()
-         
-         if isFiltering{
-             place = filteredPlaces[indexPath.row]
-         } else {
-             place = places[indexPath.row]
-         }
+         let place = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
+        
 
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
@@ -104,14 +99,9 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         //какое изображение присваиваем ячейке
         cell.imageOfPlace.image = UIImage(data: place.imageData!)
-       
+         cell.cosmosView.rating = place.rating
       
 
-        //cделали круглым только imageView
-        //высоту строки делим на 2
-        cell.imageOfPlace?.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
-        //обрезаем изображение по границам ImageView
-        cell.imageOfPlace?.clipsToBounds = true
 
 
 
@@ -176,12 +166,8 @@ class MainTableViewController: UIViewController, UITableViewDelegate, UITableVie
             guard let indexPath = tableView.indexPathForSelectedRow else {return}
             
             //извлекаем объект по индексу из массива плейс
-            let place: Place
-            if isFiltering{
-                place = filteredPlaces[indexPath.row]
-            } else {
-                place = places[indexPath.row]
-            }
+            let place = isFiltering ? filteredPlaces[indexPath.row] : places[indexPath.row]
+           
             
             //создаем экз ВС
             let newPlaceVC = segue.destination as! NewPlaceViewController

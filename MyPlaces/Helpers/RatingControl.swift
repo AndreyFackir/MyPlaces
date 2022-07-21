@@ -7,7 +7,7 @@
 
 import UIKit
 
- class RatingControl: UIStackView { //@IBDesignable позволит отобразить контент в интерфейс билдере, любые изменения будут отображаться в ИБ
+@IBDesignable class RatingControl: UIStackView { //@IBDesignable позволит отобразить контент в интерфейс билдере, любые изменения будут отображаться в ИБ
 
     //iniit(frame:) - вью создается программно
     //init(coder:) -  для работы с элементом через сториборд

@@ -169,30 +169,11 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </stackView>
-                                                <view contentMode="scaleToFill" placeholderIntrinsicWidth="170" placeholderIntrinsicHeight="30" translatesAutoresizingMaskIntoConstraints="NO" id="3Yf-r8-hM5" customClass="CosmosView" customModule="Cosmos">
-                                                    <rect key="frame" x="129" y="55" width="170" height="30"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="starSize">
-                                                            <real key="value" value="30"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="emptyBorderWidth">
-                                                            <real key="value" value="2"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="3Yf-r8-hM5" firstAttribute="centerX" secondItem="i7j-Pf-d9f" secondAttribute="centerX" id="Pgk-zU-lJE"/>
                                                 <constraint firstItem="Eus-ft-is9" firstAttribute="centerX" secondItem="i7j-Pf-d9f" secondAttribute="centerX" id="W45-Mq-4pj"/>
-                                                <constraint firstItem="3Yf-r8-hM5" firstAttribute="centerY" secondItem="i7j-Pf-d9f" secondAttribute="centerY" id="dQW-D7-60E"/>
                                                 <constraint firstItem="Eus-ft-is9" firstAttribute="centerY" secondItem="i7j-Pf-d9f" secondAttribute="centerY" id="qEL-lJ-zQP"/>
                                             </constraints>
-                                            <variation key="default">
-                                                <mask key="subviews">
-                                                    <exclude reference="Eus-ft-is9"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -216,7 +197,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="cosmosView" destination="3Yf-r8-hM5" id="3no-ii-BTa"/>
                         <outlet property="placeImage" destination="Mto-jc-JAY" id="r0T-5t-YOb"/>
                         <outlet property="placeLocation" destination="K6G-qf-hYw" id="CBT-cG-Ybf"/>
                         <outlet property="placeName" destination="Qbd-AA-VmZ" id="ipF-Kc-gTE"/>
@@ -402,8 +382,8 @@
         </scene>
     </scenes>
     <designables>
-        <designable name="3Yf-r8-hM5">
-            <size key="intrinsicContentSize" width="170" height="30"/>
+        <designable name="Eus-ft-is9">
+            <size key="intrinsicContentSize" width="252" height="44"/>
         </designable>
         <designable name="j57-SS-e19">
             <size key="intrinsicContentSize" width="90" height="14"/>

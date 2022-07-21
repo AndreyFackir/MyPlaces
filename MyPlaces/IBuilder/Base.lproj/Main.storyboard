@@ -30,12 +30,26 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Photo" translatesAutoresizingMaskIntoConstraints="NO" id="Mto-jc-JAY">
                                                     <rect key="frame" x="0.0" y="0.0" width="428" height="250"/>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dJW-BC-rlM">
+                                                    <rect key="frame" x="358" y="189" width="50" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="50" id="1MN-7e-DAb"/>
+                                                        <constraint firstAttribute="height" constant="50" id="u1V-R9-TSt"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="map"/>
+                                                    <connections>
+                                                        <segue destination="7Dn-Hy-32H" kind="presentation" identifier="showMap" modalPresentationStyle="fullScreen" id="7bt-AM-G8f"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="Mto-jc-JAY" secondAttribute="bottom" id="29S-Nf-fCg"/>
+                                                <constraint firstItem="dJW-BC-rlM" firstAttribute="bottom" secondItem="eHn-v6-gVD" secondAttribute="bottomMargin" id="8Ns-lw-gqW"/>
                                                 <constraint firstItem="Mto-jc-JAY" firstAttribute="top" secondItem="eHn-v6-gVD" secondAttribute="top" id="DGi-UP-TWQ"/>
                                                 <constraint firstAttribute="trailing" secondItem="Mto-jc-JAY" secondAttribute="trailing" id="ewH-Ig-Xhv"/>
+                                                <constraint firstItem="dJW-BC-rlM" firstAttribute="trailing" secondItem="eHn-v6-gVD" secondAttribute="trailingMargin" id="jOg-AX-D3s"/>
                                                 <constraint firstItem="Mto-jc-JAY" firstAttribute="leading" secondItem="eHn-v6-gVD" secondAttribute="leading" id="n6H-AJ-3Mf"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -210,21 +224,43 @@
             </objects>
             <point key="canvasLocation" x="1313.5514018691588" y="88.768898488120954"/>
         </scene>
-        <!--View Controller-->
+        <!--Map View Controller-->
         <scene sceneID="Jtf-vg-dpt">
             <objects>
-                <viewController id="7Dn-Hy-32H" sceneMemberID="viewController">
+                <viewController id="7Dn-Hy-32H" customClass="MapViewController" customModule="MyPlaces" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Nz4-Bv-gua">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="fYW-OK-sBD">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="fYW-OK-sBD">
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lTM-Wm-Tjr">
+                                <rect key="frame" x="344" y="44" width="44" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="2BS-Rz-xFK"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="jZg-aF-C1Z"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="xmark" catalog="system">
+                                    <color key="baseForegroundColor" red="0.078432537620000006" green="0.078429825600000003" blue="0.078430362049999994" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="closeVC" destination="7Dn-Hy-32H" eventType="touchUpInside" id="xLS-1H-hPL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="brE-yE-d68"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="fYW-OK-sBD" secondAttribute="bottom" id="4uW-tu-lBx"/>
+                            <constraint firstItem="brE-yE-d68" firstAttribute="trailing" secondItem="lTM-Wm-Tjr" secondAttribute="trailing" constant="40" id="5sW-3B-3xS"/>
+                            <constraint firstItem="fYW-OK-sBD" firstAttribute="leading" secondItem="brE-yE-d68" secondAttribute="leading" id="R87-gb-EuW"/>
+                            <constraint firstItem="fYW-OK-sBD" firstAttribute="top" secondItem="Nz4-Bv-gua" secondAttribute="top" id="ZQ5-2j-gKm"/>
+                            <constraint firstItem="lTM-Wm-Tjr" firstAttribute="top" secondItem="brE-yE-d68" secondAttribute="top" id="gZL-NU-ezA"/>
+                            <constraint firstItem="lTM-Wm-Tjr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="brE-yE-d68" secondAttribute="leading" symbolic="YES" id="sJn-pK-O5a"/>
+                            <constraint firstItem="fYW-OK-sBD" firstAttribute="trailing" secondItem="brE-yE-d68" secondAttribute="trailing" id="yFE-qv-rYA"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CTM-4m-jq4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -418,6 +454,8 @@
         <image name="Photo" width="194.66667175292969" height="195.66667175292969"/>
         <image name="emptyStar" width="255" height="256"/>
         <image name="filledStar" width="237.5" height="238"/>
+        <image name="map" width="50" height="50"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -13,10 +13,13 @@ class MapViewController: UIViewController {
     @IBOutlet var doneButton: UIButton!
     @IBOutlet var goButton: UIButton!
     
+    let annotationIdentifier = "annotationIdentifier"
+    
     var place: Place! 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.delegate = self
         setupPlacemark()
        
     }
@@ -63,5 +66,38 @@ class MapViewController: UIViewController {
             
             
         }
+    }
+}
+//MARK: - MKMapViewDelegate
+extension MapViewController: MKMapViewDelegate {
+    
+    //отвечает за отображение аннтоаций
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // если аннтотация показывает текущее полоожение юзера, то не нужна аннтотация
+        guard !(annotation is MKUserLocation) else { return nil}
+        
+        //создаем объект класса который представляет вью с аннтотацией на карте
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) as? MKPinAnnotationView //даункасти чтобы баннер отображался с булавкой
+        
+        //еси на карте нет представления с аннтотацией, то инитим новое значение
+        if annotationView == nil {
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+        }
+        
+        //чтобы отобразить аннтоттацию в виде баннера
+        annotationView?.canShowCallout = true
+        
+        if let imageData = place.imageData {
+            //добавляем на баннере изображение заведения
+            let imageVIew = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50)) // 50 - так как это высота баннера
+            imageVIew.layer.cornerRadius = 10
+            imageVIew.clipsToBounds = true
+            imageVIew.image = UIImage(data: imageData)
+            
+            annotationView?.rightCalloutAccessoryView = imageVIew //ставим справа на баннере изображение
+        }
+        
+        
+        return annotationView
     }
 }

@@ -114,22 +114,19 @@ import UIKit
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
          if segue.identifier != "showMap"  { return }
          let mapVC = segue.destination as! MapViewController
-         mapVC.place = currentPlace
+         
+         //чтобы не было нила при переходе на экран карты, когда объект еще не создан, мы передаем не объект (currentplace), а просто данные из текстфилдов
+         mapVC.place.name = placeName.text!
+         mapVC.place.location = placeLocation.text
+         mapVC.place.imageData = placeImage.image?.pngData()
+         mapVC.place.type = placeType.text
+         
      }
 
     func savePlace() {
         
-       
-        var image: UIImage?
-        
-        //если картинку выбрал пользователь
-        if imageIsChanged {
-            
-            image = placeImage.image
-        } else {
-            //присваиваем дефолтную картинку
-            image = UIImage(named: "imagePlaceholder")
-        }
+        //если картинку выбрал пользователь : //присваиваем дефолтную картинку
+        let image = imageIsChanged ? placeImage.image : UIImage(named: "imagePlaceholder")
         
         let imageData = image?.pngData()
         

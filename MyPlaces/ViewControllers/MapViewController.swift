@@ -15,7 +15,7 @@ class MapViewController: UIViewController {
     
     let annotationIdentifier = "annotationIdentifier"
     
-    var place: Place! 
+    var place = Place()
     
     override func viewDidLoad() {
         super.viewDidLoad()

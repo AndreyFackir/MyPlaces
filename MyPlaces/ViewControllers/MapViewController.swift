@@ -16,12 +16,14 @@ class MapViewController: UIViewController {
     let annotationIdentifier = "annotationIdentifier"
     
     var place = Place()
+    let locationManager = CLLocationManager() //отвечает за настройку и управление службы геолокаций
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         setupPlacemark()
-       
+       checkLocationServices()
+        
     }
    
     
@@ -67,8 +69,53 @@ class MapViewController: UIViewController {
             
         }
     }
+    
+    //проверяем включены ли службы гео на устройстве
+    private func checkLocationServices() {
+        
+        //если службы гео доступны
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            checkLocationAuthorization()
+        } else {
+            //show alert
+        }
+    }
+    
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        //определим точность места юзера
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest //максимальная точность
+        
+    }
+    
+    //проверка статуса на разрешение использования геопозиции
+    private func checkLocationAuthorization() {
+        //
+        
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse: //разрешено определять гео в момент использования
+            mapView.showsUserLocation = true //отображаем местоположение юзера
+            break
+        case .denied: //приложению отказано в доступе к гео, либо они откл в настройках
+            //необходимо объяснить юзеруу как включить через алерт
+            break
+        case .notDetermined: //статус не определен
+            locationManager.requestWhenInUseAuthorization() //спрашиваем разрешение на использование гео в момент использования приложения
+            break
+        case .restricted: //возвращается если приложение не авторизовано для использования служб гео
+            //shoe alert
+            break
+        case.authorizedAlways:
+            break
+            
+        @unknown default:
+            print("New case is available")
+        }
+    }
 }
 //MARK: - MKMapViewDelegate
+
 extension MapViewController: MKMapViewDelegate {
     
     //отвечает за отображение аннтоаций
@@ -101,3 +148,15 @@ extension MapViewController: MKMapViewDelegate {
         return annotationView
     }
 }
+
+//MARK: - CLLocationManagerDelegate
+
+extension MapViewController: CLLocationManagerDelegate {
+    
+    //вызывается при смене статуса авторизации для использования гео
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        checkLocationAuthorization()
+       
+        }
+    }
+

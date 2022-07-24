@@ -28,6 +28,7 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
         //чтобы избавиться от лишних сепараторов в таблице( а именно под звездами)
         tableView.tableFooterView = UIView(frame: CGRect(x: 0,
                                                          y: 0,
@@ -230,6 +231,9 @@ import UIKit
         dismiss(animated: true)
     }
     
+     deinit {
+         print("deinit", NewPlaceViewController.self)
+     }
 }
 
 //MARK: - Text Field Delegate

@@ -101,6 +101,9 @@ class MapViewController: UIViewController {
         }
     }
     
+    deinit {
+        print("deinit", MapViewController.self)
+    }
     
 }
 //MARK: - MKMapViewDelegate

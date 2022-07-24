@@ -270,5 +270,9 @@ class MapManager {
         
         
     }
+    
+    deinit {
+        print("deinit", MapManager.self)
+    }
 }
 

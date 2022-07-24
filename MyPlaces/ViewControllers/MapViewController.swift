@@ -27,8 +27,18 @@ class MapViewController: UIViewController {
     
     //свойство, принимающее координаты заведения
     var placeCoordinate: CLLocationCoordinate2D?
+    //свойство для хранения предыдущего местоположения пльзователя
+    var previousLocation: CLLocation? {
+        didSet {
+            //слежение за изменение места юзера и позиционирование карты по его коорд
+            startTrackinUserLocation()
+        }
+    }
     
-    let regionInMeters = 10000.0
+    //хранение маршрутов
+    var directionsArray: [MKDirections] = []
+    
+    let regionInMeters = 1000.0
     
     // в зависимости от значения индентификатора мы будем вызывать либо setupPlacemark(), либо showUserLocation
     var incomeSegueIdentifier = ""
@@ -42,8 +52,8 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         mapView.delegate = self
         setupMapView()
-       checkLocationServices()
-        addressLabel.text = "" //чтобы при загрузке карт не мелькало название лейбла по умолчанию
+        checkLocationServices()
+       //addressLabel.text = "" //чтобы при загрузке карт не мелькало название лейбла по умолчанию
         
         
     }
@@ -85,6 +95,19 @@ class MapViewController: UIViewController {
         }
     }
     
+    //если меняем маршрут, то при перестроении маршруты буду наклдываться друг на друга
+    //для этого будем удалять маршруты наложение текущего маршрута
+    //вызывается перед тем как создать новый маршрут
+    private func resetMapView( with directions: MKDirections) { //отменяет все действующие маршруты и удаляет с карты
+        mapView.removeOverlays(mapView.overlays)
+        
+        //добавляем в массив текущий маршрут
+        directionsArray.append(directions) //из параметров метода
+        
+        let _ = directionsArray.map {$0.cancel()} //проходимся по каждому элементу и вызываем кенсел
+        directionsArray.removeAll()
+    }
+    
     //прокладываем маршрут
     private func getDirections() {
         
@@ -93,6 +116,11 @@ class MapViewController: UIViewController {
             showAlert(title: "Error", message: "Current Location is not found")
             return
         }
+        
+        //вызываем режим постоянного отслеживания текущего места юзера
+        locationManager.startUpdatingLocation()
+        //передаем текцщие координаты места юзера
+        previousLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
         
         //выполняем запрос на прокладку маршрута
         
@@ -103,6 +131,9 @@ class MapViewController: UIViewController {
         
         //если все хорошо, создаем маршрут на основе сведений, которые есть в запросе
         let directions = MKDirections(request: request)
+        
+        //вызывается перед тем как создать новый маршрут, удаляя текущие маршруты
+        resetMapView(with: directions)
         
         //запускем расчет маршрута
         directions.calculate { response, error in
@@ -267,6 +298,26 @@ class MapViewController: UIViewController {
         }
     }
     
+    //слежение за изменение места юзера и позиционирование карты по его коорд
+    private func startTrackinUserLocation() {
+        guard let previousLocation = previousLocation else { return }
+        
+        //коорд центра области
+        let center = getCenterLocation(for: mapView)
+        
+        //если расстояние от предыдущего места юезра до центра отображемой области больше 50 м
+        guard center.distance(from: previousLocation) > 50 else { return }
+        //зададим новые коорд предыдущему места юзера = текцщим коорд центра
+        self.previousLocation = center
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            //вызываем метод чтобы спозиционировать карту с текцщим местом юзера
+            self.showUserLocation()
+        }
+        
+    }
+    
     //определение координат под пином( центром отображаемой области карты)
     private func getCenterLocation( for mapView: MKMapView) -> CLLocation {
         //CLLocation -  координаты( чтобы определить надо знать широту и долготу)
@@ -330,6 +381,16 @@ extension MapViewController: MKMapViewDelegate {
         
         let geocoder = CLGeocoder() //отвечает за преобразование координат и гео названий
         
+        //если переходим по сигвею showPlaceб позиционируем карту по месту юзера
+        if incomeSegueIdentifier == "showPlace" && previousLocation != nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.showUserLocation()
+            }
+        }
+        
+        //для освобождения ресурсов связанных с геокодированием рекомендуется делать отмену отложенного запроса
+        geocoder.cancelGeocode()
+        
         //преобразуем координаты в адресс
         geocoder.reverseGeocodeLocation(center) { placemarks, error in
             if let error = error {
@@ -358,7 +419,6 @@ extension MapViewController: MKMapViewDelegate {
                
             }
             
-           
         }
     }
     

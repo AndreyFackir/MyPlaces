@@ -29,6 +29,8 @@ class MapViewController: UIViewController {
         mapView.delegate = self
         setupMapView()
        checkLocationServices()
+        addressLabel.text = "" //чтобы при загрузке карт не мелькало название лейбла по умолчанию
+        
         
     }
    
@@ -163,6 +165,19 @@ class MapViewController: UIViewController {
         }
     }
     
+    //определение координат под пином( центром отображаемой области карты)
+    private func getCenterLocation( for mapView: MKMapView) -> CLLocation {
+        //CLLocation -  координаты( чтобы определить надо знать широту и долготу)
+        
+        
+        let latitude = mapView.centerCoordinate.latitude
+        let longitude = mapView.centerCoordinate.longitude
+        
+        return CLLocation(latitude: latitude, longitude: longitude)
+        
+        
+    }
+    
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default)
@@ -203,6 +218,46 @@ extension MapViewController: MKMapViewDelegate {
         
         
         return annotationView
+    }
+    
+    //получаем адресс по коорднатам
+    //как только регион меняется мы будем отображать адрес в цетрен региона
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        // определим текцщие коорд по центру отображаемой области
+        let center = getCenterLocation(for: mapView)
+        
+        let geocoder = CLGeocoder() //отвечает за преобразование координат и гео названий
+        
+        //преобразуем координаты в адресс
+        geocoder.reverseGeocodeLocation(center) { placemarks, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard  let placemarks = placemarks else { return }
+            let placemark = placemarks.first
+            
+            let streetName = placemark?.thoroughfare // название улицы
+            let buildNumber = placemark?.subThoroughfare //номер дома
+            
+            //ОБНОВЛЯТЬ ИНТЕРФЕЙС ДОЛЖНЫ В ОСНОВНОМ ПОТОКЕ АСИНХРОННО
+            DispatchQueue.main.async {
+                
+                //так как нзвание и номер - опциональный, проверяем
+                if streetName != nil && buildNumber != nil {
+                    //передаем названия в лейбл
+                    self.addressLabel.text = "\(streetName!), \(buildNumber!)"
+                } else if streetName != nil {
+                    self.addressLabel.text = "\(streetName!)"
+                } else {
+                    self.addressLabel.text = ""
+                }
+               
+            }
+            
+           
+        }
     }
     
     

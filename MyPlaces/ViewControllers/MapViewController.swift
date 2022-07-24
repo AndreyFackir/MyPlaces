@@ -13,6 +13,8 @@ class MapViewController: UIViewController {
     @IBOutlet var doneButton: UIButton!
     @IBOutlet var goButton: UIButton!
     
+    let regionInMeters = 10000.0
+    
     let annotationIdentifier = "annotationIdentifier"
     
     var place = Place()
@@ -26,6 +28,19 @@ class MapViewController: UIViewController {
         
     }
    
+    //по нажатию центрируется местоположение юзера
+    @IBAction func centerViewUSerLocation() {
+        //если можем определить коорд польщователя
+        if let location = locationManager.location?.coordinate {
+            //определяем регион для позиционирования юзера
+            let region = MKCoordinateRegion(center: location,
+                                            latitudinalMeters: regionInMeters,
+                                            longitudinalMeters: regionInMeters)
+            
+             //устанавливаем регион для отображения на экране
+            mapView.setRegion(region, animated: true)
+        }
+    }
     
     //закрываем экран с картой
     @IBAction func closeVC() {
@@ -79,6 +94,11 @@ class MapViewController: UIViewController {
             checkLocationAuthorization()
         } else {
             //show alert
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+                self.showAlert(title: "Location Services are disable",
+                               message: "")
+            }
+            
         }
     }
     
@@ -105,6 +125,7 @@ class MapViewController: UIViewController {
             break
         case .restricted: //возвращается если приложение не авторизовано для использования служб гео
             //shoe alert
+           
             break
         case.authorizedAlways:
             break
@@ -112,6 +133,14 @@ class MapViewController: UIViewController {
         @unknown default:
             print("New case is available")
         }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+        
     }
 }
 //MARK: - MKMapViewDelegate

@@ -101,13 +101,6 @@ class MapViewController: UIViewController {
         }
     }
     
-//    private func setupLocationManager() {
-//        locationManager.delegate = self
-//        //определим точность места юзера
-//        locationManager.desiredAccuracy = kCLLocationAccuracyBest //максимальная точность
-//
-//    }
-    
     
 }
 //MARK: - MKMapViewDelegate

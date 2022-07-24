@@ -112,14 +112,25 @@ import UIKit
      
      //MARK: - Navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-         if segue.identifier != "showMap"  { return }
-         let mapVC = segue.destination as! MapViewController
          
-         //чтобы не было нила при переходе на экран карты, когда объект еще не создан, мы передаем не объект (currentplace), а просто данные из текстфилдов
-         mapVC.place.name = placeName.text!
-         mapVC.place.location = placeLocation.text
-         mapVC.place.imageData = placeImage.image?.pngData()
-         mapVC.place.type = placeType.text
+         guard
+            let identifier = segue.identifier, //если получилось извелечь ид сигвея
+            let mapVC = segue.destination as? MapViewController // создать экзаемпляр класса mapVC
+         else { return }
+         
+         
+         
+         mapVC.incomeSegueIdentifier = identifier
+        
+         if identifier == "showPlace" {
+             //чтобы не было нила при переходе на экран карты, когда объект еще не создан, мы передаем не объект (currentplace), а просто данные из текстфилдов
+             mapVC.place.name = placeName.text!
+             mapVC.place.location = placeLocation.text
+             mapVC.place.imageData = placeImage.image?.pngData()
+             mapVC.place.type = placeType.text
+         }
+         
+         
          
      }
 

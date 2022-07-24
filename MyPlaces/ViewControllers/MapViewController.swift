@@ -8,12 +8,16 @@ import CoreLocation
 class MapViewController: UIViewController {
     
     @IBOutlet var mapView: MKMapView!
-    @IBOutlet var mapPinImage: UIImageView!
+   
     @IBOutlet var addressLabel: UILabel!
     @IBOutlet var doneButton: UIButton!
     @IBOutlet var goButton: UIButton!
+    @IBOutlet weak var mapPinImage: UIImageView!
     
     let regionInMeters = 10000.0
+    
+    // в зависимости от значения индентификатора мы будем вызывать либо setupPlacemark(), либо showUserLocation
+    var incomeSegueIdentifier = ""
     
     let annotationIdentifier = "annotationIdentifier"
     
@@ -23,28 +27,38 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        setupPlacemark()
+        setupMapView()
        checkLocationServices()
         
     }
    
     //по нажатию центрируется местоположение юзера
     @IBAction func centerViewUSerLocation() {
-        //если можем определить коорд польщователя
-        if let location = locationManager.location?.coordinate {
-            //определяем регион для позиционирования юзера
-            let region = MKCoordinateRegion(center: location,
-                                            latitudinalMeters: regionInMeters,
-                                            longitudinalMeters: regionInMeters)
-            
-             //устанавливаем регион для отображения на экране
-            mapView.setRegion(region, animated: true)
-        }
+        
+        showUserLocation()
+        
     }
+    
+    @IBAction func doneButtonPressed() {
+        
+    }
+    
     
     //закрываем экран с картой
     @IBAction func closeVC() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    //позиционирование карты если идентиифкатор showPlace
+    private func setupMapView() {
+        
+        if incomeSegueIdentifier == "showPlace" {
+            //скрываем маркер( pin) при переходе по сигвею showPlace
+            mapPinImage.isHidden = true
+            setupPlacemark()
+            addressLabel.isHidden = true
+            doneButton.isHidden = true
+        }
     }
     
     //отображение объекта на карте( маркер указывающий метсо на карте)
@@ -80,8 +94,6 @@ class MapViewController: UIViewController {
             //выделяем созданную аннтотацию
             self.mapView.selectAnnotation(annotation, animated: true)
             
-            
-            
         }
     }
     
@@ -116,6 +128,7 @@ class MapViewController: UIViewController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse: //разрешено определять гео в момент использования
             mapView.showsUserLocation = true //отображаем местоположение юзера
+            if incomeSegueIdentifier == "getAddress" { showUserLocation() }
             break
         case .denied: //приложению отказано в доступе к гео, либо они откл в настройках
             //необходимо объяснить юзеруу как включить через алерт
@@ -132,6 +145,21 @@ class MapViewController: UIViewController {
             
         @unknown default:
             print("New case is available")
+        }
+    }
+    
+    //при переходе по сигвею getAddress
+    private func showUserLocation() {
+        // центрируется местоположение юзера
+        //если можем определить коорд польщователя
+        if let location = locationManager.location?.coordinate {
+            //определяем регион для позиционирования юзера
+            let region = MKCoordinateRegion(center: location,
+                                            latitudinalMeters: regionInMeters,
+                                            longitudinalMeters: regionInMeters)
+            
+             //устанавливаем регион для отображения на экране
+            mapView.setRegion(region, animated: true)
         }
     }
     
@@ -176,6 +204,8 @@ extension MapViewController: MKMapViewDelegate {
         
         return annotationView
     }
+    
+    
 }
 
 //MARK: - CLLocationManagerDelegate

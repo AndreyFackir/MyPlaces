@@ -4,8 +4,19 @@ import UIKit
 import MapKit
 import CoreLocation
 
+//для передачи значение из mapViewController в класс NewPlaceVC
+protocol MapViewControllerDelegate {
+    func getAddress(_ address: String?) //@objc optional значит что метод не обязателен к реализации, сам протокол при этом тоже должен быть помечен как @objc
+}
+
+//extension MapViewControllerDelegate {
+//    func getAddress(_ address: String) //если указываем расширение для протокола, то все меот ды указанные в нем будут по дефолту опциональные, т.е. необязательными к выполнению
+//}
 
 class MapViewController: UIViewController {
+    
+    //после написания протокола создаем свойство с типом протокола( делегат класса)
+    var mapViewControllerDelegate: MapViewControllerDelegate?
     
     @IBOutlet var mapView: MKMapView!
    
@@ -42,7 +53,9 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed() {
-        
+        //передаем данные по нажатию на кнопку на другой экран через протокол( делегат)
+        mapViewControllerDelegate?.getAddress(addressLabel.text)
+        dismiss(animated: true, completion: nil)
     }
     
     

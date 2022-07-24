@@ -8,6 +8,8 @@
 import UIKit
 //import Cosmos
 
+
+
  class NewPlaceViewController: UITableViewController {
     
     //сюда будем передавать выбранную запись через сегвей для редактирования
@@ -117,11 +119,15 @@ import UIKit
             let identifier = segue.identifier, //если получилось извелечь ид сигвея
             let mapVC = segue.destination as? MapViewController // создать экзаемпляр класса mapVC
          else { return }
-         
-         
+        
          
          mapVC.incomeSegueIdentifier = identifier
-        
+         
+         //назначаем в  качестве делегата протокола MapViewControllerDelegate cам класс NewPlaceViewController
+        //так как в этом методе создается экз класса mapVC для работы с картами
+         mapVC.mapViewControllerDelegate = self
+         
+         
          if identifier == "showPlace" {
              //чтобы не было нила при переходе на экран карты, когда объект еще не создан, мы передаем не объект (currentplace), а просто данные из текстфилдов
              mapVC.place.name = placeName.text!
@@ -296,4 +302,13 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate {
             //закрыаем контроллер
         dismiss(animated: true)
     }
+}
+extension NewPlaceViewController: MapViewControllerDelegate {
+    
+    // так как мы подписались под протокол, то необходимо реализовать метод п ротокола
+    func getAddress(_ address: String?) {
+        placeLocation.text = address
+    }
+    
+   
 }
